@@ -48,4 +48,5 @@ class LinearRegression:
         return self.theta[i] * X[i] - y[i] * xj[i]
 
     #Cost Function for Mini-Batch GD
+    #lel
 
