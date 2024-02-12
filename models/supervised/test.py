@@ -4,7 +4,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.linear_model import LinearRegression as sklearnLR
 import numpy as np
-import sys
+import time
 
 # Load Dataset as Numpy Array
 #df = np.loadtxt(sys.path[1]+'/data/CarPricesPrediction.csv', delimiter=",", dtype=str)
@@ -48,19 +48,19 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 model = LinearRegression()
 
 # Fit the dataset to LinearRegression
-model.fit(X_train, y_train, 0.001)
+model.fit(X_train, y_train)
 
 # Predict y values
 y_pred = model.predict(X_test)
-
 # Mean Squared Error
 mse = np.mean((y_test - y_pred) ** 2)
 print(f"Mean Squared Error (MSE): {mse}")
 
 # Sklearn Linear Regression
 skmodel = sklearnLR()
-
+start = time.time()
 skmodel.fit(X_train, y_train, 0.001)
+print("Time: {}".format(time.time() - start))
 sk_y_pred = skmodel.predict(X_test)
 
 mse = np.mean((y_test - sk_y_pred) ** 2)

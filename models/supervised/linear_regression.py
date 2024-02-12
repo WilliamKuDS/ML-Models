@@ -1,26 +1,32 @@
 import numpy as np
 import random
+import time
 
 #Initial Attempt with no inital baseline
 class LinearRegression:
     def __init__(self):
         self.theta = None
-        self.steps = 500000
+        self.tolerance = 1e-6
 
-    def fit(self, X, y, *args):
-        # Will fix for optional args
-        learning_rate = args[0]
-        # Get the number of features
+    def fit(self, X, y, learning_rate=0.01, steps=1000000):
+        start = time.time()
+        # Get the number of features, where n = # of features
         n = X.shape[1]
         # Initialize theta as zero array with the size of features
         self.theta = np.zeros(n)
-        # Iterate till max steps
-        for _ in range(self.steps):
-            #Gradient Descent update, j = number of features
-            for j in range(n):
-                j_cost = self.gd_cost(X, y, X[:,j])
-                self.theta[j] = self.theta[j] - learning_rate*j_cost
-        # Need to implement convergence statement here
+        prev_cost = float('inf')
+        for step in range(steps):
+            #Gradient Descent update, calculate cost, then update theta
+            j_cost = self.gd_cost(X, y)
+            self.theta = self.theta - learning_rate * j_cost
+            # Convergence Test
+            if step % 1000 == 0:
+                current_cost = np.mean(self.theta)
+                if np.abs(prev_cost - current_cost) < self.tolerance:
+                    print('Model converged after {} steps'.format(step))
+                    break
+                prev_cost = current_cost
+        print("Time: {}".format(time.time() - start))
 
     def predict(self, X):
         return np.dot(X, self.theta)
@@ -36,12 +42,10 @@ class LinearRegression:
         return min_cost
 
     #Cost Function for Stocastic GD
-    def gd_cost(self, X, y, xj):
-        # Pick a random training data point (i)
+    def gd_cost(self, X, y):
+        # Pick a random training data point (i), based on the # of training points in X
         i = random.randrange(0, X.shape[0])
-        # Returns cost function of ((xi * theta) - yi) x[j][i])
-        return ((np.dot(X[i], self.theta) - y[i]) * xj[i])
+        # Returns cost function (MSE) of ((xi * theta) - yi) x[j][i])
+        return (X[i].dot(self.theta) - y[i]) * X[i]
 
     #Cost Function for Mini-Batch GD
-
-
