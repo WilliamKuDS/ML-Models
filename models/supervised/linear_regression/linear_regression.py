@@ -8,7 +8,7 @@ class LinearRegression:
         self.theta = None
         self.tolerance = 1e-6
 
-    def fit(self, X, y, learning_rate=0.01, steps=1000000):
+    def fit(self, X, y, learning_rate=0.01, steps=100000000):
         start = time.time()
         # Get the number of features, where n = # of features
         n = X.shape[1]
